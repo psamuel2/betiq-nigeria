@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BetIQ Nigeria — Nigeria's Smartest Betting Platform</title>
+<meta name="description" content="Free betting calculators, smart suggestions, community tips and verified tipsters for Nigerian bettors. Bet smarter with BetIQ Nigeria.">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #111827;
+    --bg3: #1a2235;
+    --card: #151d2e;
+    --border: #1e2d45;
+    --green: #00e676;
+    --green-dim: #00c853;
+    --green-glow: rgba(0,230,118,0.15);
+    --yellow: #ffd600;
+    --red: #ff4444;
+    --text: #e8eaf6;
+    --muted: #7986cb;
+    --accent: #3d5afe;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,26,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; }
+  .logo span { color: var(--green); }
+  .nav-links { display: flex; gap: 6px; }
+  .nav-links button {
+    background: none; border: none; color: var(--muted);
+    font-size: 0.82rem; padding: 6px 12px; border-radius: 8px;
+    cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
+  }
+  .nav-links button:hover, .nav-links button.active { background: var(--bg3); color: var(--green); }
+  .nav-social { display: flex; gap: 8px; }
+  .social-btn {
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--text); font-size: 0.75rem; padding: 5px 10px;
+    border-radius: 20px; cursor: pointer; text-decoration: none;
+    display: flex; align-items: center; gap: 4px; transition: all 0.2s;
+  }
+  .social-btn:hover { border-color: var(--green); color: var(--green); }
+
+  /* PAGES */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* HERO */
+  .hero {
+    padding: 60px 20px 40px;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,230,118,0.08) 0%, transparent 70%);
+  }
+  .hero-badge {
+    display: inline-block; background: var(--green-glow);
+    border: 1px solid rgba(0,230,118,0.3);
+    color: var(--green); font-size: 0.75rem; font-weight: 600;
+    padding: 4px 14px; border-radius: 20px; margin-bottom: 20px;
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 700; line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero h1 span { color: var(--green); }
+  .hero p { color: var(--muted); font-size: 1rem; max-width: 480px; margin: 0 auto 32px; line-height: 1.6; }
+  .hero-stats { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--green); }
+  .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+  /* SECTION */
+  .section { padding: 40px 20px; max-width: 900px; margin: 0 auto; }
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.4rem; font-weight: 700; margin-bottom: 8px;
+  }
+  .section-title span { color: var(--green); }
+  .section-sub { color: var(--muted); font-size: 0.85rem; margin-bottom: 24px; }
+
+  /* TOOL TABS */
+  .tool-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+  .tool-tab {
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--muted); font-size: 0.8rem; padding: 7px 14px;
+    border-radius: 20px; cursor: pointer; transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .tool-tab:hover, .tool-tab.active { background: var(--green-glow); border-color: var(--green); color: var(--green); }
+
+  /* CALCULATOR CARD */
+  .calc-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 28px;
+    display: none;
+  }
+  .calc-card.active { display: block; }
+  .calc-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; }
+  .calc-desc { color: var(--muted); font-size: 0.82rem; margin-bottom: 24px; }
+
+  .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .input-row.single { grid-template-columns: 1fr; }
+  .input-group { display: flex; flex-direction: column; gap: 6px; }
+  .input-group label { font-size: 0.78rem; color: var(--muted); font-weight: 500; }
+  .input-group input, .input-group select {
+    background: var(--bg2); border: 1px solid var(--border);
+    color: var(--text); font-size: 0.9rem; padding: 10px 14px;
+    border-radius: 8px; outline: none; transition: border 0.2s;
+    font-family: 'Inter', sans-serif; width: 100%;
+  }
+  .input-group input:focus, .input-group select:focus { border-color: var(--green); }
+  .input-group select option { background: var(--bg2); }
+
+  /* ACCA BUILDER */
+  .acca-legs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .acca-leg { display: flex; gap: 8px; align-items: center; }
+  .acca-leg input {
+    background: var(--bg2); border: 1px solid var(--border);
+    color: var(--text); font-size: 0.88rem; padding: 9px 12px;
+    border-radius: 8px; outline: none; flex: 1;
+    font-family: 'Inter', sans-serif; transition: border 0.2s;
+  }
+  .acca-leg input:focus { border-color: var(--green); }
+  .remove-leg {
+    background: none; border: 1px solid var(--border);
+    color: var(--muted); width: 32px; height: 32px; border-radius: 6px;
+    cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; flex-shrink: 0;
+  }
+  .remove-leg:hover { border-color: var(--red); color: var(--red); }
+  .add-leg-btn {
+    background: none; border: 1px dashed var(--border);
+    color: var(--muted); font-size: 0.8rem; padding: 8px;
+    border-radius: 8px; cursor: pointer; width: 100%;
+    transition: all 0.2s; font-family: 'Inter', sans-serif;
+  }
+  .add-leg-btn:hover { border-color: var(--green); color: var(--green); }
+
+  .calc-btn {
+    background: var(--green); color: #000; font-size: 0.9rem;
+    font-weight: 700; padding: 12px 24px; border-radius: 8px;
+    border: none; cursor: pointer; width: 100%; margin-top: 16px;
+    font-family: 'Space Grotesk', sans-serif; transition: all 0.2s;
+  }
+  .calc-btn:hover { background: var(--green-dim); transform: translateY(-1px); }
+
+  .result-box {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 20px; margin-top: 20px; display: none;
+  }
+  .result-box.show { display: block; }
+  .result-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; }
+  .result-item { text-align: center; }
+  .result-val { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--green); }
+  .result-label { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+  .result-note { font-size: 0.78rem; color: var(--muted); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+  /* SMART BETS */
+  .smart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .smart-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 22px;
+  }
+  .smart-card-icon { font-size: 1.8rem; margin-bottom: 10px; }
+  .smart-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+  .smart-card p { color: var(--muted); font-size: 0.8rem; line-height: 1.5; margin-bottom: 14px; }
+  .risk-badge {
+    display: inline-block; font-size: 0.7rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px; letter-spacing: 0.05em;
+  }
+  .risk-low { background: rgba(0,230,118,0.15); color: var(--green); }
+  .risk-med { background: rgba(255,214,0,0.15); color: var(--yellow); }
+  .risk-high { background: rgba(255,68,68,0.15); color: var(--red); }
+
+  .value-finder { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-top: 20px; }
+  .value-finder h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; margin-bottom: 16px; }
+
+  .avoid-list { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+  .avoid-item {
+    background: rgba(255,68,68,0.05); border: 1px solid rgba(255,68,68,0.2);
+    border-radius: 10px; padding: 14px 16px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .avoid-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+  .avoid-text h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 3px; color: var(--red); }
+  .avoid-text p { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+
+  /* COMMUNITY */
+  .tip-form { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 24px; }
+  .tip-form h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; margin-bottom: 16px; }
+  .tip-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .tip-fields.full { grid-template-columns: 1fr; }
+  .tip-fields input, .tip-fields select, .tip-fields textarea {
+    background: var(--bg2); border: 1px solid var(--border);
+    color: var(--text); font-size: 0.88rem; padding: 10px 14px;
+    border-radius: 8px; outline: none; font-family: 'Inter', sans-serif;
+    transition: border 0.2s; resize: vertical;
+  }
+  .tip-fields input:focus, .tip-fields select:focus, .tip-fields textarea:focus { border-color: var(--green); }
+  .tip-fields select option { background: var(--bg2); }
+  .post-btn {
+    background: var(--green); color: #000; font-size: 0.88rem;
+    font-weight: 700; padding: 11px 24px; border-radius: 8px;
+    border: none; cursor: pointer; font-family: 'Space Grotesk', sans-serif;
+    transition: all 0.2s;
+  }
+  .post-btn:hover { background: var(--green-dim); }
+
+  .tips-feed { display: flex; flex-direction: column; gap: 14px; }
+  .tip-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px;
+    transition: border-color 0.2s;
+  }
+  .tip-card:hover { border-color: rgba(0,230,118,0.3); }
+  .tip-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .tip-user { display: flex; align-items: center; gap: 10px; }
+  .tip-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--bg3); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem; color: var(--green);
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .tip-username { font-size: 0.88rem; font-weight: 600; }
+  .tip-time { font-size: 0.72rem; color: var(--muted); }
+  .tip-verified { font-size: 0.7rem; color: var(--green); margin-left: 4px; }
+  .tip-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tip-tag {
+    font-size: 0.7rem; padding: 3px 10px; border-radius: 20px;
+    font-weight: 600;
+  }
+  .tag-sport { background: var(--bg3); color: var(--muted); }
+  .tag-platform { background: rgba(61,90,254,0.15); color: #7986ff; }
+  .tip-match { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+  .tip-prediction { color: var(--muted); font-size: 0.82rem; margin-bottom: 12px; line-height: 1.5; }
+  .tip-footer { display: flex; justify-content: space-between; align-items: center; }
+  .tip-odds { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--green); }
+  .tip-odds span { font-size: 0.7rem; color: var(--muted); font-family: 'Inter', sans-serif; font-weight: 400; }
+  .tip-actions { display: flex; gap: 8px; }
+  .tip-action-btn {
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--muted); font-size: 0.75rem; padding: 5px 12px;
+    border-radius: 20px; cursor: pointer; transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .tip-action-btn:hover { border-color: var(--green); color: var(--green); }
+  .tip-result-win { color: var(--green); font-size: 0.75rem; font-weight: 700; }
+  .tip-result-pending { color: var(--yellow); font-size: 0.75rem; font-weight: 700; }
+
+  /* LEADERBOARD */
+  .leaderboard { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .lb-header {
+    display: grid; grid-template-columns: 40px 1fr 80px 80px 80px;
+    padding: 12px 20px; background: var(--bg3);
+    font-size: 0.72rem; color: var(--muted); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .lb-row {
+    display: grid; grid-template-columns: 40px 1fr 80px 80px 80px;
+    padding: 14px 20px; border-top: 1px solid var(--border);
+    align-items: center; transition: background 0.2s;
+  }
+  .lb-row:hover { background: var(--bg3); }
+  .lb-rank { font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: var(--muted); }
+  .lb-rank.top { color: var(--yellow); }
+  .lb-tipster { display: flex; align-items: center; gap: 10px; }
+  .lb-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--bg2); display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.78rem; color: var(--green);
+    font-family: 'Space Grotesk', sans-serif; border: 1px solid var(--border);
+  }
+  .lb-name { font-size: 0.88rem; font-weight: 500; }
+  .lb-badge { font-size: 0.65rem; background: var(--green-glow); color: var(--green); padding: 2px 7px; border-radius: 10px; margin-top: 2px; display: inline-block; }
+  .lb-stat { font-size: 0.88rem; text-align: center; }
+  .lb-winrate { color: var(--green); font-weight: 700; font-family: 'Space Grotesk', sans-serif; }
+
+  /* TELEGRAM CTA */
+  .tg-cta {
+    background: linear-gradient(135deg, rgba(0,230,118,0.08), rgba(61,90,254,0.08));
+    border: 1px solid rgba(0,230,118,0.2);
+    border-radius: var(--radius); padding: 28px; text-align: center; margin-top: 32px;
+  }
+  .tg-cta h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; margin-bottom: 8px; }
+  .tg-cta p { color: var(--muted); font-size: 0.82rem; margin-bottom: 18px; }
+  .tg-btn {
+    background: #229ED9; color: #fff; font-size: 0.88rem;
+    font-weight: 700; padding: 11px 28px; border-radius: 8px;
+    border: none; cursor: pointer; font-family: 'Space Grotesk', sans-serif;
+    transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;
+  }
+  .tg-btn:hover { background: #1a8bbf; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border); padding: 24px 20px;
+    text-align: center; color: var(--muted); font-size: 0.78rem; margin-top: 60px;
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--green); }
+
+  /* NOTIFICATION */
+  .notif {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    background: var(--card); border: 1px solid var(--green);
+    color: var(--text); padding: 12px 24px; border-radius: 10px;
+    font-size: 0.85rem; z-index: 999; opacity: 0;
+    transition: opacity 0.3s; pointer-events: none;
+    white-space: nowrap;
+  }
+  .notif.show { opacity: 1; }
+
+  @media (max-width: 600px) {
+    .input-row { grid-template-columns: 1fr; }
+    .tip-fields { grid-template-columns: 1fr; }
+    .lb-header, .lb-row { grid-template-columns: 32px 1fr 60px 60px; }
+    .lb-header > *:nth-child(4), .lb-row > *:nth-child(4) { display: none; }
+    .nav-social { display: none; }
+    .hero-stats { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Bet<span>IQ</span> Nigeria</div>
+  <div class="nav-links">
+    <button class="active" onclick="showPage('calculators', this)">🧮 Calculators</button>
+    <button onclick="showPage('smart', this)">🧠 Smart Bets</button>
+    <button onclick="showPage('community', this)">👥 Community</button>
+    <button onclick="showPage('tipsters', this)">⭐ Tipsters</button>
+  </div>
+  <div class="nav-social">
+    <a class="social-btn" href="#" onclick="showNotif('Telegram channel coming soon!')">✈️ Telegram</a>
+    <a class="social-btn" href="#" onclick="showNotif('Twitter page coming soon!')">𝕏 Twitter</a>
+  </div>
+</nav>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif"></div>
+
+<!-- ======================== PAGE: CALCULATORS ======================== -->
+<div class="page active" id="page-calculators">
+  <div class="hero">
+    <div class="hero-badge">🇳🇬 Built for Nigerian Bettors</div>
+    <h1>Bet Smarter.<br><span>Win More.</span></h1>
+    <p>Free professional betting tools, smart suggestions, and Nigeria's most trusted tipster community.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">Free Tools</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free Forever</div></div>
+      <div class="stat"><div class="stat-num">🇳🇬</div><div class="stat-label">Nigeria First</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🧮 Betting <span>Calculators</span></div>
+    <div class="section-sub">Professional tools used by smart bettors. All calculations instant — no signup needed.</div>
+
+    <div class="tool-tabs">
+      <button class="tool-tab active" onclick="showCalc('acca', this)">Accumulator</button>
+      <button class="tool-tab" onclick="showCalc('stake', this)">Stake Finder</button>
+      <button class="tool-tab" onclick="showCalc('bankroll', this)">Bankroll Manager</button>
+      <button class="tool-tab" onclick="showCalc('tracker', this)">Bet Tracker</button>
+      <button class="tool-tab" onclick="showCalc('odds', this)">Odds Converter</button>
+      <button class="tool-tab" onclick="showCalc('eachway', this)">Each Way</button>
+    </div>
+
+    <!-- ACCUMULATOR -->
+    <div class="calc-card active" id="calc-acca">
+      <div class="calc-title">Accumulator Calculator</div>
+      <div class="calc-desc">Add your selections and see your total odds and potential winnings instantly.</div>
+      <div class="input-row single">
+        <div class="input-group">
+          <label>STAKE AMOUNT (₦)</label>
+          <input type="number" id="acca-stake" placeholder="e.g. 1000" min="0">
+        </div>
+      </div>
+      <div class="acca-legs" id="acca-legs">
+        <div class="acca-leg"><input type="number" placeholder="Odds e.g. 1.85" step="0.01" min="1" class="acca-odd"><button class="remove-leg" onclick="removeLeg(this)">×</button></div>
+        <div class="acca-leg"><input type="number" placeholder="Odds e.g. 2.10" step="0.01" min="1" class="acca-odd"><button class="remove-leg" onclick="removeLeg(this)">×</button></div>
+        <div class="acca-leg"><input type="number" placeholder="Odds e.g. 1.60" step="0.01" min="1" class="acca-odd"><button class="remove-leg" onclick="removeLeg(this)">×</button></div>
+      </div>
+      <button class="add-leg-btn" onclick="addLeg()">+ Add another selection</button>
+      <button class="calc-btn" onclick="calcAcca()">Calculate Winnings</button>
+      <div class="result-box" id="acca-result">
+        <div class="result-grid">
+          <div class="result-item"><div class="result-val" id="acca-total-odd">—</div><div class="result-label">Total Odds</div></div>
+          <div class="result-item"><div class="result-val" id="acca-potential">—</div><div class="result-label">Potential Win</div></div>
+          <div class="result-item"><div class="result-val" id="acca-profit">—</div><div class="result-label">Net Profit</div></div>
+          <div class="result-item"><div class="result-val" id="acca-selections">—</div><div class="result-label">Selections</div></div>
+        </div>
+        <div class="result-note" id="acca-note"></div>
+      </div>
+    </div>
+
+    <!-- STAKE FINDER -->
+    <div class="calc-card" id="calc-stake">
+      <div class="calc-title">Stake Finder</div>
+      <div class="calc-desc">Know your target winnings? Enter it and find exactly how much to stake.</div>
+      <div class="input-row">
+        <div class="input-group">
+          <label>TARGET WINNINGS (₦)</label>
+          <input type="number" id="stake-target" placeholder="e.g. 50000" min="0">
+        </div>
+        <div class="input-group">
+          <label>ODDS</label>
+          <input type="number" id="stake-odds" placeholder="e.g. 3.50" step="0.01" min="1">
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcStake()">Find My Stake</button>
+      <div class="result-box" id="stake-result">
+        <div class="result-grid">
+          <div class="result-item"><div class="result-val" id="stake-amount">—</div><div class="result-label">Stake Needed</div></div>
+          <div class="result-item"><div class="result-val" id="stake-profit">—</div><div class="result-label">Net Profit</div></div>
+          <div class="result-item"><div class="result-val" id="stake-roi">—</div><div class="result-label">ROI</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BANKROLL MANAGER -->
+    <div class="calc-card" id="calc-bankroll">
+      <div class="calc-title">Bankroll Manager</div>
+      <div class="calc-desc">Manage your betting budget like a professional. Never lose more than you can afford.</div>
+      <div class="input-row">
+        <div class="input-group">
+          <label>TOTAL BETTING BUDGET (₦)</label>
+          <input type="number" id="bank-total" placeholder="e.g. 20000" min="0">
+        </div>
+        <div class="input-group">
+          <label>RISK LEVEL</label>
+          <select id="bank-risk">
+            <option value="1">Conservative (1% per bet)</option>
+            <option value="2">Moderate (2% per bet)</option>
+            <option value="3" selected>Standard (3% per bet)</option>
+            <option value="5">Aggressive (5% per bet)</option>
+          </select>
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcBankroll()">Calculate My Limits</button>
+      <div class="result-box" id="bank-result">
+        <div class="result-grid">
+          <div class="result-item"><div class="result-val" id="bank-stake">—</div><div class="result-label">Max Stake Per Bet</div></div>
+          <div class="result-item"><div class="result-val" id="bank-bets">—</div><div class="result-label">Number of Bets</div></div>
+          <div class="result-item"><div class="result-val" id="bank-risk-label">—</div><div class="result-label">Risk Level</div></div>
+        </div>
+        <div class="result-note" id="bank-note"></div>
+      </div>
+    </div>
+
+    <!-- BET TRACKER -->
+    <div class="calc-card" id="calc-tracker">
+      <div class="calc-title">Bet Tracker</div>
+      <div class="calc-desc">Track your betting history and see your real win rate and profit/loss.</div>
+      <div class="input-row">
+        <div class="input-group">
+          <label>STAKE (₦)</label>
+          <input type="number" id="track-stake" placeholder="e.g. 2000" min="0">
+        </div>
+        <div class="input-group">
+          <label>ODDS</label>
+          <input type="number" id="track-odds" placeholder="e.g. 2.50" step="0.01" min="1">
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label>RESULT</label>
+          <select id="track-result">
+            <option value="win">✅ Win</option>
+            <option value="loss">❌ Loss</option>
+            <option value="void">⚪ Void/Cancelled</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>SPORT</label>
+          <select id="track-sport">
+            <option>Football</option>
+            <option>Basketball</option>
+            <option>Tennis</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <button class="calc-btn" onclick="addBet()">Add This Bet</button>
+      <div class="result-box show" id="tracker-summary">
+        <div class="result-grid">
+          <div class="result-item"><div class="result-val" id="tr-bets">0</div><div class="result-label">Total Bets</div></div>
+          <div class="result-item"><div class="result-val" id="tr-winrate">0%</div><div class="result-label">Win Rate</div></div>
+          <div class="result-item"><div class="result-val" id="tr-staked">₦0</div><div class="result-label">Total Staked</div></div>
+          <div class="result-item"><div class="result-val" id="tr-pl">₦0</div><div class="result-label">Profit / Loss</div></div>
+        </div>
+        <div class="result-note">Add your bets above to track your performance over time.</div>
+      </div>
+    </div>
+
+    <!-- ODDS CONVERTER -->
+    <div class="calc-card" id="calc-odds">
+      <div class="calc-title">Odds Converter</div>
+      <div class="calc-desc">Convert between decimal, fractional, American odds and implied probability instantly.</div>
+      <div class="input-row">
+        <div class="input-group">
+          <label>INPUT FORMAT</label>
+          <select id="odds-format">
+            <option value="decimal">Decimal (1.85) — Used on Bet9ja, Sportybet</option>
+            <option value="fractional">Fractional (17/20) — UK Style</option>
+            <option value="american">American (-118) — US Style</option>
+            <option value="probability">Probability (54%) — Implied chance</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>ENTER YOUR ODDS</label>
+          <input type="text" id="odds-input" placeholder="e.g. 1.85">
+        </div>
+      </div>
+      <button class="calc-btn" onclick="convertOdds()">Convert Odds</button>
+      <div class="result-box" id="odds-result">
+        <div class="result-grid">
+          <div class="result-item"><div class="result-val" id="odds-decimal">—</div><div class="result-label">Decimal</div></div>
+          <div class="result-item"><div class="result-val" id="odds-fractional">—</div><div class="result-label">Fractional</div></div>
+          <div class="result-item"><div class="result-val" id="odds-american">—</div><div class="result-label">American</div></div>
+          <div class="result-item"><div class="result-val" id="odds-prob">—</div><div class="result-label">Win Chance</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EACH WAY -->
+    <div class="calc-card" id="calc-eachway">
+      <div class="calc-title">Each Way Calculator</div>
+      <div class="calc-desc">Calculate your returns on each way bets — common in horse racing and some football markets.</div>
+      <div class="input-row">
+        <div class="input-group">
+          <label>STAKE PER WAY (₦)</label>
+          <input type="number" id="ew-stake" placeholder="e.g. 1000" min="0">
+        </div>
+        <div class="input-group">
+          <label>WIN ODDS</label>
+          <input type="number" id="ew-odds" placeholder="e.g. 5.00" step="0.01" min="1">
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label>EACH WAY TERMS</label>
+          <select id="ew-terms">
+            <option value="4">1/4 odds</option>
+            <option value="5">1/5 odds</option>
+            <option value="3">1/3 odds</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>RESULT</label>
+          <select id="ew-result">
+            <option value="win">Win (1st place)</option>
+            <option value="place">Place (2nd/3rd)</option>
+            <option value="loss">Loss</option>
+          </select>
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcEachWay()">Calculate Returns</button>
+      <div class="result-box" id="ew-result-box">
+        <div class="result-grid">
+          <div class="result-item"><div class="result-val" id="ew-total-stake">—</div><div class="result-label">Total Staked</div></div>
+          <div class="result-item"><div class="result-val" id="ew-return">—</div><div class="result-label">Total Return</div></div>
+          <div class="result-item"><div class="result-val" id="ew-profit">—</div><div class="result-label">Net Profit</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tg-cta">
+      <h3>📱 Get Tips on Telegram</h3>
+      <p>Join our Telegram channel and get the best community tips delivered straight to your phone every day.</p>
+      <button class="tg-btn" onclick="showNotif('Telegram channel coming soon! Follow us.')">✈️ Join BetIQ Nigeria on Telegram</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== PAGE: SMART BETS ======================== -->
+<div class="page" id="page-smart">
+  <div class="section">
+    <div class="section-title">🧠 Smart <span>Bet Suggestions</span></div>
+    <div class="section-sub">Mathematical tools to help you make smarter decisions — not predictions, but better thinking.</div>
+
+    <div class="smart-grid">
+      <div class="smart-card">
+        <div class="smart-card-icon">🎯</div>
+        <h3>Low Risk Acca Builder</h3>
+        <p>Build accumulators using only heavy favourites (odds between 1.20 – 1.50). Lower odds, much safer bet, steady returns over time.</p>
+        <span class="risk-badge risk-low">LOW RISK</span>
+      </div>
+      <div class="smart-card">
+        <div class="smart-card-icon">🏦</div>
+        <h3>Banker Bet Strategy</h3>
+        <p>Identify one match you're very confident about. Use it as your banker — stake more on it alone rather than combining with uncertain matches.</p>
+        <span class="risk-badge risk-low">LOW RISK</span>
+      </div>
+      <div class="smart-card">
+        <div class="smart-card-icon">⚖️</div>
+        <h3>Value Bet Thinking</h3>
+        <p>A bet has value when the bookmaker's implied probability is lower than your own assessment. Focus on value, not just big odds.</p>
+        <span class="risk-badge risk-med">MEDIUM RISK</span>
+      </div>
+      <div class="smart-card">
+        <div class="smart-card-icon">🔄</div>
+        <h3>Double Chance Bets</h3>
+        <p>Instead of betting on one team to win, bet on two outcomes (Win or Draw). Lower odds but wins more often — great for uncertain matches.</p>
+        <span class="risk-badge risk-low">LOW RISK</span>
+      </div>
+      <div class="smart-card">
+        <div class="smart-card-icon">⚽</div>
+        <h3>Both Teams To Score</h3>
+        <p>BTTS markets often have better value than match result markets. Works best in high-scoring leagues where both sides attack regularly.</p>
+        <span class="risk-badge risk-med">MEDIUM RISK</span>
+      </div>
+      <div class="smart-card">
+        <div class="smart-card-icon">📊</div>
+        <h3>Over/Under 2.5 Goals</h3>
+        <p>More predictable than match outcomes. Research teams' average goals scored and conceded before betting on over or under markets.</p>
+        <span class="risk-badge risk-med">MEDIUM RISK</span>
+      </div>
+    </div>
+
+    <div class="value-finder" style="margin-top: 32px;">
+      <h3>🔍 Value Bet Calculator</h3>
+      <p style="color: var(--muted); font-size: 0.82rem; margin-bottom: 20px;">Enter the bookmaker's odds and your own estimated probability. We'll tell you if there's value.</p>
+      <div class="input-row">
+        <div class="input-group">
+          <label>BOOKMAKER ODDS (DECIMAL)</label>
+          <input type="number" id="vb-odds" placeholder="e.g. 2.50" step="0.01" min="1">
+        </div>
+        <div class="input-group">
+          <label>YOUR ESTIMATED WIN CHANCE (%)</label>
+          <input type="number" id="vb-prob" placeholder="e.g. 55" min="1" max="99">
+        </div>
+      </div>
+      <button class="calc-btn" onclick="calcValue()">Check For Value</button>
+      <div class="result-box" id="vb-result">
+        <div class="result-grid">
+          <div class="result-item"><div class="result-val" id="vb-implied">—</div><div class="result-label">Bookie Implied %</div></div>
+          <div class="result-item"><div class="result-val" id="vb-edge">—</div><div class="result-label">Your Edge</div></div>
+          <div class="result-item"><div class="result-val" id="vb-verdict">—</div><div class="result-label">Verdict</div></div>
+        </div>
+        <div class="result-note" id="vb-note"></div>
+      </div>
+    </div>
+
+    <div class="avoid-list" style="margin-top: 32px;">
+      <div style="font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">⚠️ Bets To Avoid</div>
+      <div style="color: var(--muted); font-size: 0.82rem; margin-bottom: 16px;">These bet types consistently lose money for most bettors. Avoid them.</div>
+      <div class="avoid-item">
+        <div class="avoid-icon">🎰</div>
+        <div class="avoid-text"><h4>10+ Team Accumulators</h4><p>The more selections you add, the lower your chance of winning. A 10-team acca needs ALL 10 to win. One bad result loses everything. Bookmakers love these — they make huge profits from them.</p></div>
+      </div>
+      <div class="avoid-item">
+        <div class="avoid-icon">💸</div>
+        <div class="avoid-text"><h4>Chasing Losses</h4><p>Doubling your stake after every loss to "recover" is called the Martingale system. It leads to catastrophic losses fast. Always stick to your bankroll plan.</p></div>
+      </div>
+      <div class="avoid-item">
+        <div class="avoid-icon">🔮</div>
+        <div class="avoid-text"><h4>Tipsters Claiming 100% Success</h4><p>No tipster wins 100% of the time. Anyone claiming this is lying. Real tipsters show verified records with wins AND losses. Check the leaderboard here for honest stats.</p></div>
+      </div>
+      <div class="avoid-item">
+        <div class="avoid-icon">😤</div>
+        <div class="avoid-text"><h4>Emotional Betting</h4><p>Never bet on your favourite team to win just because you support them. Emotion clouds judgment. Only bet on what the stats support, not what your heart says.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== PAGE: COMMUNITY ======================== -->
+<div class="page" id="page-community">
+  <div class="section">
+    <div class="section-title">👥 Community <span>Tips</span></div>
+    <div class="section-sub">Share your predictions. Track your accuracy. Build your reputation as Nigeria's top tipster.</div>
+
+    <div class="tip-form">
+      <h3>📝 Post Your Prediction</h3>
+      <div class="tip-fields">
+        <input type="text" id="tip-name" placeholder="Your name / username">
+        <select id="tip-sport">
+          <option>⚽ Football</option>
+          <option>🏀 Basketball</option>
+          <option>🎾 Tennis</option>
+          <option>🏈 American Football</option>
+          <option>🏏 Cricket</option>
+        </select>
+      </div>
+      <div class="tip-fields">
+        <input type="text" id="tip-match" placeholder="Match e.g. Arsenal vs Chelsea">
+        <select id="tip-platform">
+          <option>Bet9ja</option>
+          <option>Sportybet</option>
+          <option>1xBet</option>
+          <option>Betway</option>
+          <option>MSport</option>
+          <option>BetKing</option>
+        </select>
+      </div>
+      <div class="tip-fields">
+        <input type="text" id="tip-pick" placeholder="Your pick e.g. Arsenal to Win, Over 2.5">
+        <input type="number" id="tip-odd" placeholder="Odds e.g. 1.85" step="0.01" min="1">
+      </div>
+      <div class="tip-fields full">
+        <textarea id="tip-reason" placeholder="Why do you think this will win? (optional — builds your credibility)" rows="3"></textarea>
+      </div>
+      <button class="post-btn" onclick="postTip()">📤 Post My Tip</button>
+    </div>
+
+    <div class="tips-feed" id="tips-feed">
+      <!-- Sample tips -->
+      <div class="tip-card">
+        <div class="tip-header">
+          <div class="tip-user">
+            <div class="tip-avatar">AK</div>
+            <div>
+              <div class="tip-username">AbujaBetKing <span class="tip-verified">✅</span></div>
+              <div class="tip-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="tip-meta">
+            <span class="tip-tag tag-sport">⚽ Football</span>
+            <span class="tip-tag tag-platform">Sportybet</span>
+          </div>
+        </div>
+        <div class="tip-match">Man City vs Arsenal</div>
+        <div class="tip-prediction">Both Teams To Score — Man City have scored in their last 8 home games. Arsenal attack is in form with 3 goals in last 2 matches. Both defences have been leaky recently.</div>
+        <div class="tip-footer">
+          <div><div class="tip-odds">1.72 <span>odds</span></div></div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span class="tip-result-pending">⏳ PENDING</span>
+            <button class="tip-action-btn" onclick="showNotif('Liked!')">👍 24</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-header">
+          <div class="tip-user">
+            <div class="tip-avatar">LT</div>
+            <div>
+              <div class="tip-username">LagosTipster</div>
+              <div class="tip-time">5 hours ago</div>
+            </div>
+          </div>
+          <div class="tip-meta">
+            <span class="tip-tag tag-sport">⚽ Football</span>
+            <span class="tip-tag tag-platform">Bet9ja</span>
+          </div>
+        </div>
+        <div class="tip-match">Barcelona vs Real Madrid</div>
+        <div class="tip-prediction">Over 2.5 Goals — El Clasico always delivers goals. Last 6 meetings averaged 3.2 goals per game. Both teams in top scoring form this season.</div>
+        <div class="tip-footer">
+          <div><div class="tip-odds">1.65 <span>odds</span></div></div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span class="tip-result-win">✅ WON</span>
+            <button class="tip-action-btn" onclick="showNotif('Liked!')">👍 41</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-header">
+          <div class="tip-user">
+            <div class="tip-avatar">NG</div>
+            <div>
+              <div class="tip-username">NaijaGoalz</div>
+              <div class="tip-time">Yesterday</div>
+            </div>
+          </div>
+          <div class="tip-meta">
+            <span class="tip-tag tag-sport">🏀 Basketball</span>
+            <span class="tip-tag tag-platform">1xBet</span>
+          </div>
+        </div>
+        <div class="tip-match">LA Lakers vs Golden State</div>
+        <div class="tip-prediction">Lakers to Win — Playing at home with full squad available. Warriors missing 2 key players. Lakers are 8-2 at home this season.</div>
+        <div class="tip-footer">
+          <div><div class="tip-odds">2.10 <span>odds</span></div></div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span class="tip-result-win">✅ WON</span>
+            <button class="tip-action-btn" onclick="showNotif('Liked!')">👍 18</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tg-cta">
+      <h3>✈️ Tips Auto-Posted to Telegram</h3>
+      <p>Every tip posted here is automatically shared to our Telegram channel. Join to get notified instantly.</p>
+      <button class="tg-btn" onclick="showNotif('Telegram channel coming soon!')">Join Our Telegram Channel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== PAGE: TIPSTERS ======================== -->
+<div class="page" id="page-tipsters">
+  <div class="section">
+    <div class="section-title">⭐ Tipster <span>Leaderboard</span></div>
+    <div class="section-sub">Nigeria's most accurate tipsters — ranked by real verified win rates. No fake records.</div>
+
+    <div class="leaderboard">
+      <div class="lb-header">
+        <div>#</div>
+        <div>Tipster</div>
+        <div style="text-align:center">Tips</div>
+        <div style="text-align:center">Win Rate</div>
+        <div style="text-align:center">Profit</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank top">🥇</div>
+        <div class="lb-tipster">
+          <div class="lb-avatar">AK</div>
+          <div><div class="lb-name">AbujaBetKing ✅</div><div class="lb-badge">Football</div></div>
+        </div>
+        <div class="lb-stat">47</div>
+        <div class="lb-stat lb-winrate">74%</div>
+        <div class="lb-stat" style="color: var(--green)">+₦84k</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank top">🥈</div>
+        <div class="lb-tipster">
+          <div class="lb-avatar">LT</div>
+          <div><div class="lb-name">LagosTipster</div><div class="lb-badge">Football</div></div>
+        </div>
+        <div class="lb-stat">63</div>
+        <div class="lb-stat lb-winrate">68%</div>
+        <div class="lb-stat" style="color: var(--green)">+₦61k</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank top">🥉</div>
+        <div class="lb-tipster">
+          <div class="lb-avatar">NG</div>
+          <div><div class="lb-name">NaijaGoalz</div><div class="lb-badge">Multi-Sport</div></div>
+        </div>
+        <div class="lb-stat">38</div>
+        <div class="lb-stat lb-winrate">63%</div>
+        <div class="lb-stat" style="color: var(--green)">+₦42k</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank">4</div>
+        <div class="lb-tipster">
+          <div class="lb-avatar">PH</div>
+          <div><div class="lb-name">PHBettor</div><div class="lb-badge">Football</div></div>
+        </div>
+        <div class="lb-stat">29</div>
+        <div class="lb-stat lb-winrate">59%</div>
+        <div class="lb-stat" style="color: var(--green)">+₦28k</div>
+      </div>
+      <div class="lb-row">
+        <div class="lb-rank">5</div>
+        <div class="lb-tipster">
+          <div class="lb-avatar">KN</div>
+          <div><div class="lb-name">KanoNaija</div><div class="lb-badge">Football</div></div>
+        </div>
+        <div class="lb-stat">51</div>
+        <div class="lb-stat lb-winrate">55%</div>
+        <div class="lb-stat" style="color: var(--yellow)">+₦12k</div>
+      </div>
+    </div>
+
+    <div style="background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-top: 24px;">
+      <div style="font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">🌟 Become a Featured Tipster</div>
+      <p style="color: var(--muted); font-size: 0.82rem; margin-bottom: 20px; line-height: 1.6;">Post tips regularly, build your win rate, and get a verified profile. Top tipsters get featured placement and reach thousands of Nigerian bettors.</p>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 160px; background: var(--bg3); border-radius: 10px; padding: 16px; text-align: center;">
+          <div style="font-size: 1.5rem; margin-bottom: 6px;">📝</div>
+          <div style="font-size: 0.82rem; font-weight: 600; margin-bottom: 4px;">Post Tips</div>
+          <div style="font-size: 0.75rem; color: var(--muted);">Share predictions in the Community tab</div>
+        </div>
+        <div style="flex: 1; min-width: 160px; background: var(--bg3); border-radius: 10px; padding: 16px; text-align: center;">
+          <div style="font-size: 1.5rem; margin-bottom: 6px;">📈</div>
+          <div style="font-size: 0.82rem; font-weight: 600; margin-bottom: 4px;">Build Record</div>
+          <div style="font-size: 0.75rem; color: var(--muted);">Your win rate is tracked automatically</div>
+        </div>
+        <div style="flex: 1; min-width: 160px; background: var(--bg3); border-radius: 10px; padding: 16px; text-align: center;">
+          <div style="font-size: 1.5rem; margin-bottom: 6px;">⭐</div>
+          <div style="font-size: 0.82rem; font-weight: 600; margin-bottom: 4px;">Get Featured</div>
+          <div style="font-size: 0.75rem; color: var(--muted);">Top tipsters get verified badge + page</div>
+        </div>
+      </div>
+      <button class="calc-btn" style="margin-top: 20px;" onclick="showPage('community', document.querySelector('.nav-links button:nth-child(3)'))">Start Posting Tips →</button>
+    </div>
+
+    <div class="tg-cta">
+      <h3>📣 Tipsters — Reach More People</h3>
+      <p>Your tips posted on BetIQ Nigeria are automatically shared to our Telegram channel and Twitter page. More reach for your predictions, for free.</p>
+      <button class="tg-btn" onclick="showNotif('Auto-posting feature launching soon!')">✈️ Connect Your Tips to Telegram</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p style="margin-bottom: 8px;">
+    <strong style="color: var(--green);">BetIQ Nigeria</strong> — Nigeria's Smartest Betting Platform
+  </p>
+  <p style="margin-bottom: 12px;">
+    <a href="#">About</a> · <a href="#">Privacy Policy</a> · <a href="#">Contact</a> · <a href="#">Advertise</a>
+  </p>
+  <p>⚠️ Bet responsibly. Only bet what you can afford to lose. This platform does not guarantee winnings.</p>
+</footer>
+
+<script>
+// ---- NAVIGATION ----
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ---- CALCULATOR TABS ----
+function showCalc(name, btn) {
+  document.querySelectorAll('.calc-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tool-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('calc-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ---- NOTIFICATION ----
+function showNotif(msg) {
+  const n = document.getElementById('notif');
+  n.textContent = msg;
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 3000);
+}
+
+// ---- ACCUMULATOR ----
+function addLeg() {
+  const legs = document.getElementById('acca-legs');
+  const div = document.createElement('div');
+  div.className = 'acca-leg';
+  div.innerHTML = `<input type="number" placeholder="Odds e.g. 1.90" step="0.01" min="1" class="acca-odd"><button class="remove-leg" onclick="removeLeg(this)">×</button>`;
+  legs.appendChild(div);
+}
+function removeLeg(btn) {
+  const legs = document.querySelectorAll('.acca-leg');
+  if (legs.length > 1) btn.parentElement.remove();
+}
+function calcAcca() {
+  const stake = parseFloat(document.getElementById('acca-stake').value);
+  const odds = [...document.querySelectorAll('.acca-odd')].map(i => parseFloat(i.value)).filter(v => !isNaN(v) && v > 0);
+  if (!stake || odds.length === 0) { showNotif('Please enter stake and at least one odds value'); return; }
+  const totalOdd = odds.reduce((a, b) => a * b, 1);
+  const potential = stake * totalOdd;
+  const profit = potential - stake;
+  const r = document.getElementById('acca-result');
+  document.getElementById('acca-total-odd').textContent = totalOdd.toFixed(2);
+  document.getElementById('acca-potential').textContent = '₦' + Math.round(potential).toLocaleString();
+  document.getElementById('acca-profit').textContent = '₦' + Math.round(profit).toLocaleString();
+  document.getElementById('acca-selections').textContent = odds.length;
+  const risk = odds.length <= 3 ? '✅ Manageable risk' : odds.length <= 6 ? '⚠️ Medium risk — each extra selection halves your chances' : '🔴 High risk — consider reducing selections';
+  document.getElementById('acca-note').textContent = risk;
+  r.classList.add('show');
+}
+
+// ---- STAKE FINDER ----
+function calcStake() {
+  const target = parseFloat(document.getElementById('stake-target').value);
+  const odds = parseFloat(document.getElementById('stake-odds').value);
+  if (!target || !odds) { showNotif('Please fill in all fields'); return; }
+  const stake = target / odds;
+  const profit = target - stake;
+  const roi = ((profit / stake) * 100).toFixed(1);
+  document.getElementById('stake-amount').textContent = '₦' + Math.round(stake).toLocaleString();
+  document.getElementById('stake-profit').textContent = '₦' + Math.round(profit).toLocaleString();
+  document.getElementById('stake-roi').textContent = roi + '%';
+  document.getElementById('stake-result').classList.add('show');
+}
+
+// ---- BANKROLL ----
+function calcBankroll() {
+  const total = parseFloat(document.getElementById('bank-total').value);
+  const risk = parseInt(document.getElementById('bank-risk').value);
+  if (!total) { showNotif('Please enter your budget'); return; }
+  const stake = (total * risk) / 100;
+  const bets = Math.floor(total / stake);
+  const labels = { 1: '🟢 Conservative', 2: '🟡 Moderate', 3: '🟠 Standard', 5: '🔴 Aggressive' };
+  const notes = {
+    1: 'Very safe. Your bankroll lasts a long time even on a losing streak.',
+    2: 'Good balance between safety and decent stakes.',
+    3: 'Standard approach used by most recreational bettors.',
+    5: 'Risky. A 20-game losing streak wipes your entire bankroll.'
+  };
+  document.getElementById('bank-stake').textContent = '₦' + Math.round(stake).toLocaleString();
+  document.getElementById('bank-bets').textContent = bets + ' bets';
+  document.getElementById('bank-risk-label').textContent = labels[risk];
+  document.getElementById('bank-note').textContent = notes[risk];
+  document.getElementById('bank-result').classList.add('show');
+}
+
+// ---- BET TRACKER ----
+let bets = [];
+function addBet() {
+  const stake = parseFloat(document.getElementById('track-stake').value);
+  const odds = parseFloat(document.getElementById('track-odds').value);
+  const result = document.getElementById('track-result').value;
+  if (!stake || !odds) { showNotif('Please fill stake and odds'); return; }
+  bets.push({ stake, odds, result });
+  updateTracker();
+  document.getElementById('track-stake').value = '';
+  document.getElementById('track-odds').value = '';
+  showNotif('Bet added to tracker!');
+}
+function updateTracker() {
+  const total = bets.length;
+  const wins = bets.filter(b => b.result === 'win').length;
+  const staked = bets.reduce((a, b) => a + b.stake, 0);
+  const returned = bets.reduce((a, b) => b.result === 'win' ? a + (b.stake * b.odds) : a, 0);
+  const pl = returned - staked;
+  const winrate = total > 0 ? ((wins / total) * 100).toFixed(0) : 0;
+  document.getElementById('tr-bets').textContent = total;
+  document.getElementById('tr-winrate').textContent = winrate + '%';
+  document.getElementById('tr-staked').textContent = '₦' + Math.round(staked).toLocaleString();
+  const plEl = document.getElementById('tr-pl');
+  plEl.textContent = (pl >= 0 ? '+' : '') + '₦' + Math.round(pl).toLocaleString();
+  plEl.style.color = pl >= 0 ? 'var(--green)' : 'var(--red)';
+}
+
+// ---- ODDS CONVERTER ----
+function convertOdds() {
+  const format = document.getElementById('odds-format').value;
+  const input = document.getElementById('odds-input').value.trim();
+  let decimal;
+  if (format === 'decimal') {
+    decimal = parseFloat(input);
+  } else if (format === 'fractional') {
+    const parts = input.split('/');
+    if (parts.length !== 2) { showNotif('Enter fractional odds like 17/20'); return; }
+    decimal = (parseFloat(parts[0]) / parseFloat(parts[1])) + 1;
+  } else if (format === 'american') {
+    const am = parseFloat(input);
+    decimal = am > 0 ? (am / 100) + 1 : (100 / Math.abs(am)) + 1;
+  } else {
+    const prob = parseFloat(input);
+    decimal = 100 / prob;
+  }
+  if (!decimal || decimal < 1) { showNotif('Please enter valid odds'); return; }
+  const prob = (1 / decimal * 100).toFixed(1);
+  const num = decimal - 1;
+  const gcd = (a, b) => b ? gcd(b, a % b) : a;
+  const scale = 100;
+  const n = Math.round(num * scale);
+  const d = scale;
+  const g = gcd(n, d);
+  const fractional = `${n/g}/${d/g}`;
+  const american = decimal >= 2 ? '+' + Math.round((decimal - 1) * 100) : '-' + Math.round(100 / (decimal - 1));
+  document.getElementById('odds-decimal').textContent = decimal.toFixed(2);
+  document.getElementById('odds-fractional').textContent = fractional;
+  document.getElementById('odds-american').textContent = american;
+  document.getElementById('odds-prob').textContent = prob + '%';
+  document.getElementById('odds-result').classList.add('show');
+}
+
+// ---- EACH WAY ----
+function calcEachWay() {
+  const stake = parseFloat(document.getElementById('ew-stake').value);
+  const odds = parseFloat(document.getElementById('ew-odds').value);
+  const terms = parseInt(document.getElementById('ew-terms').value);
+  const result = document.getElementById('ew-result').value;
+  if (!stake || !odds) { showNotif('Please fill all fields'); return; }
+  const totalStake = stake * 2;
+  const placeOdds = (odds - 1) / terms + 1;
+  let ret = 0;
+  if (result === 'win') ret = (stake * odds) + (stake * placeOdds);
+  else if (result === 'place') ret = stake * placeOdds;
+  else ret = 0;
+  const profit = ret - totalStake;
+  document.getElementById('ew-total-stake').textContent = '₦' + Math.round(totalStake).toLocaleString();
+  document.getElementById('ew-return').textContent = '₦' + Math.round(ret).toLocaleString();
+  const profitEl = document.getElementById('ew-profit');
+  profitEl.textContent = (profit >= 0 ? '+' : '') + '₦' + Math.round(profit).toLocaleString();
+  profitEl.style.color = profit >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('ew-result-box').classList.add('show');
+}
+
+// ---- VALUE BET ----
+function calcValue() {
+  const odds = parseFloat(document.getElementById('vb-odds').value);
+  const yourProb = parseFloat(document.getElementById('vb-prob').value);
+  if (!odds || !yourProb) { showNotif('Please fill all fields'); return; }
+  const impliedProb = (1 / odds * 100).toFixed(1);
+  const edge = (yourProb - impliedProb).toFixed(1);
+  const hasValue = edge > 0;
+  document.getElementById('vb-implied').textContent = impliedProb + '%';
+  document.getElementById('vb-edge').textContent = (edge > 0 ? '+' : '') + edge + '%';
+  const verdictEl = document.getElementById('vb-verdict');
+  verdictEl.textContent = hasValue ? '✅ VALUE' : '❌ NO VALUE';
+  verdictEl.style.color = hasValue ? 'var(--green)' : 'var(--red)';
+  document.getElementById('vb-note').textContent = hasValue
+    ? `This bet has value. The bookie thinks there's a ${impliedProb}% chance, but you estimate ${yourProb}%. Your edge is ${edge}%. Bet this consistently and you profit long-term.`
+    : `No value here. The bookie's implied probability (${impliedProb}%) is higher than your estimate (${yourProb}%). Skip this bet or revisit your analysis.`;
+  document.getElementById('vb-result').classList.add('show');
+}
+
+// ---- COMMUNITY TIPS ----
+function postTip() {
+  const name = document.getElementById('tip-name').value.trim();
+  const sport = document.getElementById('tip-sport').value;
+  const match = document.getElementById('tip-match').value.trim();
+  const platform = document.getElementById('tip-platform').value;
+  const pick = document.getElementById('tip-pick').value.trim();
+  const odd = document.getElementById('tip-odd').value;
+  const reason = document.getElementById('tip-reason').value.trim();
+  if (!name || !match || !pick || !odd) { showNotif('Please fill in Name, Match, Pick and Odds'); return; }
+  const initials = name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+  const card = document.createElement('div');
+  card.className = 'tip-card';
+  card.innerHTML = `
+    <div class="tip-header">
+      <div class="tip-user">
+        <div class="tip-avatar">${initials}</div>
+        <div><div class="tip-username">${name}</div><div class="tip-time">Just now</div></div>
+      </div>
+      <div class="tip-meta">
+        <span class="tip-tag tag-sport">${sport}</span>
+        <span class="tip-tag tag-platform">${platform}</span>
+      </div>
+    </div>
+    <div class="tip-match">${match}</div>
+    ${reason ? `<div class="tip-prediction">${reason}</div>` : `<div class="tip-prediction">Pick: ${pick}</div>`}
+    <div class="tip-footer">
+      <div><div class="tip-odds">${parseFloat(odd).toFixed(2)} <span>odds</span></div></div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span class="tip-result-pending">⏳ PENDING</span>
+        <button class="tip-action-btn" onclick="showNotif('Liked!')">👍 0</button>
+      </div>
+    </div>`;
+  document.getElementById('tips-feed').prepend(card);
+  document.getElementById('tip-name').value = '';
+  document.getElementById('tip-match').value = '';
+  document.getElementById('tip-pick').value = '';
+  document.getElementById('tip-odd').value = '';
+  document.getElementById('tip-reason').value = '';
+  showNotif('✅ Tip posted! Sharing to Telegram...');
+}
+</script>
+</body>
+</html>
