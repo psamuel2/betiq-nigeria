@@ -326,6 +326,82 @@
   }
   .notif.show { opacity: 1; }
 
+  /* FREE TIPS */
+  .tips-date-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+  }
+  .tips-date {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.85rem; color: var(--muted);
+    background: var(--bg3); border: 1px solid var(--border);
+    padding: 6px 14px; border-radius: 20px;
+  }
+  .tips-date span { color: var(--green); font-weight: 600; }
+  .tg-follow-btn {
+    background: #229ED9; color: #fff; font-size: 0.8rem;
+    font-weight: 700; padding: 7px 16px; border-radius: 20px;
+    border: none; cursor: pointer; font-family: 'Space Grotesk', sans-serif;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .free-tip-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+  .free-tip-card:hover { border-color: rgba(0,230,118,0.3); }
+  .free-tip-top {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;
+  }
+  .free-tip-match { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700; }
+  .free-tip-league { font-size: 0.75rem; color: var(--muted); margin-top: 3px; }
+  .free-tip-badges { display: flex; gap: 6px; flex-wrap: wrap; }
+  .ftbadge {
+    font-size: 0.7rem; font-weight: 700; padding: 3px 10px;
+    border-radius: 20px; letter-spacing: 0.03em;
+  }
+  .ftbadge-sport { background: var(--bg3); color: var(--muted); }
+  .ftbadge-platform { background: rgba(61,90,254,0.15); color: #7986ff; }
+  .ftbadge-win { background: rgba(0,230,118,0.15); color: var(--green); }
+  .ftbadge-loss { background: rgba(255,68,68,0.15); color: var(--red); }
+  .ftbadge-pending { background: rgba(255,214,0,0.15); color: var(--yellow); }
+  .free-tip-pick {
+    background: var(--bg2); border-radius: 8px; padding: 12px 14px;
+    margin-bottom: 12px;
+  }
+  .free-tip-pick-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .free-tip-pick-val { font-size: 0.95rem; font-weight: 600; }
+  .free-tip-bottom {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+  }
+  .free-tip-odds-big { font-family: 'Space Grotesk', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--green); }
+  .free-tip-odds-big span { font-size: 0.7rem; color: var(--muted); font-family: 'Inter', sans-serif; font-weight: 400; }
+  .free-tip-analysis { font-size: 0.8rem; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+  .confidence-bar { margin-bottom: 12px; }
+  .confidence-label { font-size: 0.72rem; color: var(--muted); margin-bottom: 5px; display: flex; justify-content: space-between; }
+  .confidence-track { background: var(--bg2); border-radius: 10px; height: 6px; overflow: hidden; }
+  .confidence-fill { height: 100%; border-radius: 10px; background: linear-gradient(90deg, var(--green-dim), var(--green)); transition: width 0.6s ease; }
+  .disclaimer-box {
+    background: rgba(255,214,0,0.05); border: 1px solid rgba(255,214,0,0.2);
+    border-radius: 10px; padding: 14px 16px; margin-top: 24px;
+    font-size: 0.78rem; color: var(--muted); line-height: 1.5;
+  }
+  .stats-row {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    margin-bottom: 28px;
+  }
+  .stats-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px; text-align: center;
+  }
+  .stats-box-val { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--green); }
+  .stats-box-label { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+
+  @media (max-width: 600px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
   @media (max-width: 600px) {
     .input-row { grid-template-columns: 1fr; }
     .tip-fields { grid-template-columns: 1fr; }
@@ -346,10 +422,11 @@
     <button onclick="showPage('smart', this)">🧠 Smart Bets</button>
     <button onclick="showPage('community', this)">👥 Community</button>
     <button onclick="showPage('tipsters', this)">⭐ Tipsters</button>
+    <button onclick="showPage('freetips', this)">🎯 Free Tips</button>
   </div>
   <div class="nav-social">
-    <a class="social-btn" href="#" onclick="showNotif('Telegram channel coming soon!')">✈️ Telegram</a>
-    <a class="social-btn" href="#" onclick="showNotif('Twitter page coming soon!')">𝕏 Twitter</a>
+    <a class="social-btn" href="https://t.me/betiqnigeria" target="_blank">✈️ Telegram</a>
+    <a class="social-btn" href="https://twitter.com/BetIQNigeria" target="_blank">𝕏 Twitter</a>
   </div>
 </nav>
 
@@ -903,16 +980,399 @@
   </div>
 </div>
 
-<footer>
-  <p style="margin-bottom: 8px;">
-    <strong style="color: var(--green);">BetIQ Nigeria</strong> — Nigeria's Smartest Betting Platform
-  </p>
-  <p style="margin-bottom: 12px;">
-    <a href="#">About</a> · <a href="#">Privacy Policy</a> · <a href="#">Contact</a> · <a href="#">Advertise</a>
-  </p>
-  <p>⚠️ Bet responsibly. Only bet what you can afford to lose. This platform does not guarantee winnings.</p>
-</footer>
+<!-- LIVE FREE TIPS SECTION -->
 
+<div class="stats-row">
+  <div class="stats-box">
+    <div class="stats-box-val" id="liveWinRate">--%</div>
+    <div class="stats-box-label">Confidence Avg</div>
+  </div>
+
+  <div class="stats-box">
+    <div class="stats-box-val" id="liveTipsCount">0</div>
+    <div class="stats-box-label">Today's Tips</div>
+  </div>
+
+  <div class="stats-box">
+    <div class="stats-box-val" id="liveSports">0</div>
+    <div class="stats-box-label">Sports</div>
+  </div>
+
+  <div class="stats-box">
+    <div class="stats-box-val">🔥 LIVE</div>
+    <div class="stats-box-label">Auto Updated</div>
+  </div>
+</div>
+
+<div class="tips-date-header">
+  <div class="tips-date">
+    📅 <span id="todayDate"></span> — Live Tips
+  </div>
+
+  <a
+    class="tg-follow-btn"
+    href="https://t.me/betiqnigeria"
+    target="_blank"
+  >
+    ✈️ Get Tips on Telegram
+  </a>
+</div>
+
+<div style="margin-bottom:20px">
+
+<select
+id="sportFilter"
+style="
+padding:10px;
+border-radius:12px;
+background:#111;
+color:white;
+border:1px solid rgba(255,255,255,.15);
+"
+>
+
+<option value="all">All Sports</option>
+
+<option value="soccer">Football</option>
+
+<option value="basketball">Basketball</option>
+
+<option value="baseball">Baseball</option>
+
+<option value="icehockey">Hockey</option>
+
+</select>
+
+</div>
+
+<div id="tipsContainer">
+
+<div class="free-tip-card">
+
+Loading today's smart tips...
+
+</div>
+
+</div>
+
+<div class="tg-cta" style="margin-top:32px;">
+
+<h3>📱 Never Miss A Free Tip</h3>
+
+<p>
+
+Live odds + smart picks updated automatically.
+
+</p>
+
+<a
+class="tg-btn"
+href="https://t.me/betiqnigeria"
+target="_blank"
+>
+
+✈️ Join BetIQ Nigeria
+
+</a>
+
+</div>
+
+<div class="disclaimer-box">
+
+⚠️ Responsible Betting Reminder:
+Predictions are generated automatically from market odds and are not guaranteed.
+
+</div>
+
+<script>
+
+const SPORTS = [
+
+"soccer",
+"basketball"
+
+];
+
+const ENDPOINT =
+"YOUR_BACKEND_ENDPOINT";
+
+document.getElementById("todayDate").innerHTML =
+new Date().toLocaleDateString(
+"en-US",
+{
+weekday:"long",
+day:"numeric",
+month:"long",
+year:"numeric"
+}
+);
+
+async function loadTips(){
+
+const container =
+document.getElementById("tipsContainer");
+
+container.innerHTML =
+`
+<div class="free-tip-card">
+Loading matches...
+</div>
+`;
+
+let selected =
+document
+.getElementById("sportFilter")
+.value;
+
+try{
+
+let all=[];
+
+for(let sport of SPORTS){
+
+if(
+selected!=="all"
+&&
+sport!==selected
+)
+continue;
+
+const res=
+await fetch(
+`${ENDPOINT}?sport=${sport}`
+);
+
+const data=
+await res.json();
+
+all.push(...data);
+
+}
+
+renderTips(
+all.slice(0,6)
+);
+
+}catch(e){
+
+container.innerHTML=
+`
+<div class="free-tip-card">
+
+Unable to load tips
+
+</div>
+`;
+
+}
+
+}
+
+function smartPick(odds){
+
+if(odds<1.65)
+return [
+"Favourite To Win",
+92
+];
+
+if(odds<2)
+return [
+"Double Chance",
+80
+];
+
+if(odds<2.4)
+return [
+"Over 2.5",
+72
+];
+
+return[
+"Value Bet",
+61
+];
+
+}
+
+function renderTips(matches){
+
+const container=
+document.getElementById(
+"tipsContainer"
+);
+
+container.innerHTML="";
+
+let total=0;
+
+let sports=
+new Set();
+
+matches.forEach(m=>{
+
+let odd=
+m.odds||1.8;
+
+let pick=
+smartPick(
+odd
+);
+
+total+=pick[1];
+
+sports.add(
+m.sport
+);
+
+container.innerHTML+=`
+
+<div class="free-tip-card">
+
+<div class="free-tip-top">
+
+<div>
+
+<div class="free-tip-match">
+
+${m.home}
+vs
+${m.away}
+
+</div>
+
+<div class="free-tip-league">
+
+${m.league}
+
+</div>
+
+</div>
+
+<div class="free-tip-badges">
+
+<span class="ftbadge ftbadge-sport">
+
+${m.sport}
+
+</span>
+
+<span class="ftbadge ftbadge-pending">
+
+LIVE
+
+</span>
+
+</div>
+
+</div>
+
+<div class="free-tip-pick">
+
+<div class="free-tip-pick-label">
+
+Our Pick
+
+</div>
+
+<div class="free-tip-pick-val">
+
+${pick[0]}
+
+</div>
+
+</div>
+
+<div class="confidence-bar">
+
+<div class="confidence-label">
+
+<span>
+
+Confidence
+
+</span>
+
+<span>
+
+${pick[1]}%
+
+</span>
+
+</div>
+
+<div class="confidence-track">
+
+<div
+class="confidence-fill"
+style="width:${pick[1]}%"
+>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="free-tip-bottom">
+
+<div class="free-tip-odds-big">
+
+${odd}
+
+<span>
+
+odds
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+"liveTipsCount"
+).innerHTML=
+matches.length;
+
+document.getElementById(
+"liveSports"
+).innerHTML=
+sports.size;
+
+document.getElementById(
+"liveWinRate"
+).innerHTML=
+Math.round(
+total/matches.length
+||0
+)+"%";
+
+}
+
+document
+.getElementById(
+"sportFilter"
+)
+.addEventListener(
+"change",
+loadTips
+);
+
+loadTips();
+
+setInterval(
+loadTips,
+600000
+);
+
+</script>
 <script>
 // ---- NAVIGATION ----
 function showPage(name, btn) {
@@ -1148,5 +1608,226 @@ function postTip() {
   showNotif('✅ Tip posted! Sharing to Telegram...');
 }
 </script>
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadTips();
+    setInterval(loadTips, 600000);
+});
+
+async function loadTips(){
+
+const container =
+document.getElementById("tipsContainer");
+
+if(!container) return;
+
+container.innerHTML=`
+<div class="free-tip-card">
+Loading today's smart tips...
+</div>
+`;
+
+try{
+
+const response =
+await fetch(
+"https://api.the-odds-api.com/v4/sports/upcoming/odds/?apiKey=29e29f2c4624dd6b4f397abbaffd1232&regions=eu&markets=h2h&oddsFormat=decimal"
+);
+
+const games =
+await response.json();
+
+container.innerHTML="";
+
+if(!games.length){
+
+container.innerHTML=`
+<div class="free-tip-card">
+No matches available.
+</div>
+`;
+
+return;
+
+}
+
+let totalConfidence=0;
+
+games
+.slice(0,8)
+.forEach(game=>{
+
+const odd =
+game.bookmakers?.[0]
+?.markets?.[0]
+?.outcomes?.[0]
+?.price
+|| 1.80;
+
+let confidence =
+Math.round(
+Math.max(
+60,
+95-(odd*10)
+)
+);
+
+totalConfidence += confidence;
+
+let pick =
+odd<=1.7
+? "Favourite To Win"
+: odd<=2
+? "Double Chance"
+: odd<=2.4
+? "Over 2.5 Goals"
+: "Value Pick";
+
+container.innerHTML += `
+
+<div class="free-tip-card">
+
+<div class="free-tip-top">
+
+<div>
+
+<div class="free-tip-match">
+
+${game.home_team}
+
+vs
+
+${game.away_team}
+
+</div>
+
+<div class="free-tip-league">
+
+${game.sport_title}
+
+</div>
+
+</div>
+
+<div class="free-tip-badges">
+
+<span class="ftbadge ftbadge-sport">
+
+LIVE
+
+</span>
+
+<span class="ftbadge ftbadge-pending">
+
+⏳ TODAY
+
+</span>
+
+</div>
+
+</div>
+
+<div class="free-tip-pick">
+
+<div class="free-tip-pick-label">
+
+Our Pick
+
+</div>
+
+<div class="free-tip-pick-val">
+
+${pick}
+
+</div>
+
+</div>
+
+<div class="confidence-bar">
+
+<div class="confidence-label">
+
+<span>
+
+Confidence
+
+</span>
+
+<span>
+
+${confidence}%
+
+</span>
+
+</div>
+
+<div class="confidence-track">
+
+<div
+class="confidence-fill"
+style="width:${confidence}%"
+></div>
+
+</div>
+
+</div>
+
+<div class="free-tip-bottom">
+
+<div class="free-tip-odds-big">
+
+${odd}
+
+<span>
+
+odds
+
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("liveTipsCount").innerText =
+Math.min(games.length,8);
+
+document.getElementById("liveSports").innerText =
+new Set(
+games
+.slice(0,8)
+.map(g=>g.sport_title)
+).size;
+
+document.getElementById("liveWinRate").innerText =
+Math.round(
+totalConfidence/
+Math.min(games.length,8)
+)+"%";
+
+}catch(e){
+
+container.innerHTML=`
+<div class="free-tip-card">
+
+Unable to load tips.
+
+</div>
+`;
+
+console.log(e);
+
+}
+
+}
+
+</script>
 </body>
 </html>
+
